@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 3.16)
-
+cmake_minimum_required(VERSION 3.5)
 project(lightning)
+
+set(CMAKE_BUILD_TYPE "Release") 
 
 # Default to C++17
 if (NOT CMAKE_CXX_STANDARD)
@@ -25,35 +26,35 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/libs)
 # set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/libs)
 
+add_subdirectory(thirdparty/livox_ros_driver)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(cmake/packages.cmake)
 
-# msg 和 srv
-set(MY_SRV_FILES "")
-set(SRC_DIR ${PROJECT_SOURCE_DIR}/srv)
-file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.srv)
-foreach (SRC_FILE ${SRC_FILES})
-    file(RELATIVE_PATH REL_PATH ${SRC_DIR} ${SRC_FILE})
-    list(APPEND MY_SRV_FILES ${PROJECT_SOURCE_DIR}:srv/${REL_PATH})
-endforeach ()
-
-rosidl_generate_interfaces(${PROJECT_NAME}
-        ${MY_SRV_FILES}
-        ${MY_MSG_FILES}
-        ${MY_ACTION_FILES}
-        DEPENDENCIES std_msgs geometry_msgs sensor_msgs nav_msgs
+find_package(catkin REQUIRED COMPONENTS
+    roscpp std_msgs geometry_msgs sensor_msgs nav_msgs std_srvs
+    tf2 tf2_ros message_filters pcl_ros pcl_conversions
+    message_generation livox_ros_driver
 )
 
+add_service_files(
+  DIRECTORY srv
+  FILES
+  LocCmd.srv
+  SaveMap.srv
+)
+
+generate_messages(DEPENDENCIES std_msgs geometry_msgs sensor_msgs nav_msgs)
+
+catkin_package(CATKIN_DEPENDS roscpp std_msgs geometry_msgs sensor_msgs nav_msgs std_srvs tf2 tf2_ros pcl_conversions message_filters livox_ros_driver message_runtime)
+
 include_directories(
-        ${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp
+    ${catkin_INCLUDE_DIRS}
 )
 
 install(DIRECTORY config
-        DESTINATION lib/${PROJECT_NAME}/
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-add_subdirectory(thirdparty/livox_ros_driver)
+# livox_ros_driver is a separate catkin package; do not add_subdirectory here
 
 add_subdirectory(src)
-
-ament_package()

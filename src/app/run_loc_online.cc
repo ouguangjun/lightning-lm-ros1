@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     google::ParseCommandLineFlags(&argc, &argv, true);
     using namespace lightning;
 
-    rclcpp::init(argc, argv);
+    ros::init(argc, argv, "lightning_loc");
 
     LocSystem::Options opt;
     LocSystem loc(opt);
@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     loc.SetInitPose(SE3());
     loc.Spin();
 
-    rclcpp::shutdown();
+    ros::shutdown();
 
     return 0;
 }

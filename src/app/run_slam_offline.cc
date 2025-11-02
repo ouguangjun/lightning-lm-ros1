@@ -60,13 +60,13 @@ int main(int argc, char** argv) {
 
         /// lidar 的处理
         .AddPointCloud2Handle(lidar_topic,
-                              [&slam](sensor_msgs::msg::PointCloud2::SharedPtr msg) {
+                              [&slam](const sensor_msgs::PointCloud2::ConstPtr& msg) {
                                   slam.ProcessLidar(msg);
                                   return true;
                               })
         /// livox 的处理
         .AddLivoxCloudHandle("/livox/lidar",
-                             [&slam](livox_ros_driver2::msg::CustomMsg::SharedPtr cloud) {
+                             [&slam](const livox_ros_driver::CustomMsg::ConstPtr& cloud) {
                                  slam.ProcessLidar(cloud);
                                  return true;
                              })

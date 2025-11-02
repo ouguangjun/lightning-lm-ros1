@@ -5,34 +5,36 @@
 #include "bag_io.h"
 
 #include <glog/logging.h>
-#include <filesystem>
-#include <rosbag2_cpp/reader.hpp>
-#include <rosbag2_cpp/readers/sequential_reader.hpp>
+#include <rosbag/bag.h>
+#include <rosbag/view.h>
 
 namespace lightning {
 
 void RosbagIO::Go(int sleep_usec) {
-    std::filesystem::path p(bag_file_);
-    rosbag2_cpp::Reader reader(std::make_unique<rosbag2_cpp::readers::SequentialReader>());
-    rosbag2_cpp::ConverterOptions cv_options{"cdr", "cdr"};
-    reader.open({bag_file_, "sqlite3"}, cv_options);
+    rosbag::Bag bag(bag_file_);
+    LOG(INFO) << "running in " << bag_file_ << ", reg process func: " << process_func_.size();
 
-    while (reader.has_next()) {
-        auto msg = reader.read_next();
-        auto iter = process_func_.find(msg->topic_name);
+    if (!bag.isOpen()) {
+        LOG(ERROR) << "cannot open " << bag_file_;
+        return;
+    }
+
+    rosbag::View view(bag);
+    for (const rosbag::MessageInstance &m : view) {
+        auto iter = process_func_.find(m.getTopic());
         if (iter != process_func_.end()) {
-            iter->second(msg);
+            iter->second(m);
         }
 
         if (sleep_usec > 0) {
             usleep(sleep_usec);
         }
-
         if (lightning::debug::flg_exit) {
-            return;
+            break;
         }
     }
 
+    bag.close();
     LOG(INFO) << "bag " << bag_file_ << " finished.";
 }
 

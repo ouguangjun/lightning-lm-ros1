@@ -21,8 +21,7 @@ int main(int argc, char** argv) {
 
     using namespace lightning;
 
-    /// 需要rclcpp::init
-    rclcpp::init(argc, argv);
+    ros::init(argc, argv, "lightning_slam");
 
     SlamSystem::Options options;
     options.online_mode_ = true;
@@ -37,9 +36,7 @@ int main(int argc, char** argv) {
     slam.Spin();
 
     Timer::PrintAll();
-
-    rclcpp::shutdown();
-
+    ros::shutdown();
     LOG(INFO) << "done";
 
     return 0;

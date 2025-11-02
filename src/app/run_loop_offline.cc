@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
                           return true;
                       })
         .AddPointCloud2Handle("points_raw",
-                              [&lio, &cur_kf, &loop](sensor_msgs::msg::PointCloud2::SharedPtr cloud) {
+                              [&lio, &cur_kf, &loop](const sensor_msgs::PointCloud2::ConstPtr& cloud) {
                                   lio.ProcessPointCloud2(cloud);
                                   lio.Run();
 

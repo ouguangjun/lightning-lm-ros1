@@ -5,6 +5,7 @@
 *libs
 **data
 **/.vscode/
-
+**temp
 **cmake-build-debug**
 **cmake-build-release**
+*thirdparty/oneapi-tbb-2022.2.0-lin/

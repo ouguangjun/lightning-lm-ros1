@@ -217,7 +217,7 @@ class NormalDistributionsTransform : public pcl::Registration<PointSource, Point
     // If no point indices have been given, construct a set of indices for the entire input point cloud
     if (!indices_) {
       this->fake_indices_ = true;
-      indices_.reset(new pcl::Indices);
+      indices_ = boost::make_shared<std::vector<int>>();
     }
 
     // If we have a set of fake indices, but they do not match the number of points in the cloud, update them

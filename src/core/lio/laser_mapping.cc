@@ -307,7 +307,7 @@ void LaserMapping::MakeKF() {
     last_kf_ = kf;
 }
 
-void LaserMapping::ProcessPointCloud2(const sensor_msgs::msg::PointCloud2::SharedPtr &msg) {
+void LaserMapping::ProcessPointCloud2(const sensor_msgs::PointCloud2::ConstPtr &msg) {
     UL lock(mtx_buffer_);
     Timer::Evaluate(
         [&, this]() {
@@ -331,7 +331,7 @@ void LaserMapping::ProcessPointCloud2(const sensor_msgs::msg::PointCloud2::Share
         "Preprocess (Standard)");
 }
 
-void LaserMapping::ProcessPointCloud2(const livox_ros_driver2::msg::CustomMsg::SharedPtr &msg) {
+void LaserMapping::ProcessPointCloud2(const livox_ros_driver::CustomMsg::ConstPtr &msg) {
     UL lock(mtx_buffer_);
     Timer::Evaluate(
         [&, this]() {

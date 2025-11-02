@@ -51,13 +51,13 @@ int main(int argc, char** argv) {
                           return true;
                       })
         .AddPointCloud2Handle(lidar_topic,
-                              [&loc](sensor_msgs::msg::PointCloud2::SharedPtr cloud) {
+                              [&loc](const sensor_msgs::PointCloud2::ConstPtr& cloud) {
                                   loc.ProcessLidarMsg(cloud);
                                   usleep(1000);
                                   return true;
                               })
         .AddLivoxCloudHandle("/livox/lidar",
-                             [&loc](livox_ros_driver2::msg::CustomMsg::SharedPtr cloud) {
+                             [&loc](const livox_ros_driver::CustomMsg::ConstPtr& cloud) {
                                  loc.ProcessLivoxLidarMsg(cloud);
                                  usleep(1000);
                                  return true;
