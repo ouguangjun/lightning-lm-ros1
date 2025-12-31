@@ -33,7 +33,7 @@ include(cmake/packages.cmake)
 find_package(catkin REQUIRED COMPONENTS
     roscpp std_msgs geometry_msgs sensor_msgs nav_msgs std_srvs
     tf2 tf2_ros message_filters pcl_ros pcl_conversions
-    message_generation livox_ros_driver
+    message_generation
 )
 
 add_service_files(

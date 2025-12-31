@@ -1,3 +1,41 @@
+# ROS1 Version
+
+这是个人使用的ros1版本，也适合有恋旧癖或者就是嫌麻烦懒得升级ubuntu的slamer 
+
+已在ubuntu 18.04测试下，可正常运行。 ubuntu 20.04理论上应该也没问题
+
+- ubuntu 18.04/20.04
+- g++ gcc > 9.0
+- pangolin 
+- tbb
+- pcl 1.8 
+- yaml-cpp
+  
+
+一些编译环境注意的点：
+
+1. 18.04环境下，g++ gcc需要升级到9.0以上，下面是直接升级成11的方式
+
+```bash
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt update
+sudo apt install gcc-11 g++-11
+cd /usr/bin
+sudo rm gcc g++
+sudo ln -s gcc-11 gcc
+sudo ln -s g++-11 g++
+```
+
+2. 18.04环境下，需要把cmake/packages.cmake里的UBUNTU1804_TBB设置成ON(默认ON)， 然后记得把/thirdparty里的oneapi原地解压
+
+3. 如果你没安装过pangolin,建议不要安装thirdparty提供的，也不要安装github官方最新的分支，会有一些奇妙的报错，建议直接安装旧一点的分支，我安装的是v0.8的[tag](https://github.com/stevenlovegrove/Pangolin/archive/refs/tags/v0.8.zip)
+
+4. 如果没安装过livox sdk，需要安装
+
+5. 有其他问题欢迎提issue或者邮件我
+   
+6. 后续会持续维护高博最新的功能优化
+
 # Lightning-LM
 
 Lightning-Speed Lidar Localization and Mapping

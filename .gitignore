@@ -9,3 +9,4 @@
 **cmake-build-debug**
 **cmake-build-release**
 *thirdparty/oneapi-tbb-2022.2.0-lin/
+*thirdparty/Pangolin-0.9.3/
